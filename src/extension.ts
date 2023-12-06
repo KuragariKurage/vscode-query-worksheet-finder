@@ -10,7 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "create-snowflake-worksheets" is now active!');
+	const config = vscode.workspace.getConfiguration('create-snowflake-worksheets');
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
@@ -28,16 +28,41 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const fileName = `worksheet__${year}-${month}-${day}_${hour}-${minutes}-${seconds}.sql`;
 
-		const homeDir = require('os').homedir();
-		const dirPath = path.join(homeDir, 'dev', 'company', 'snowflake_worksheets');
-		const filePath = path.join(dirPath, fileName);
+		const dirPath: string | undefined = config.get('savePath');
 
-		fs.mkdirSync(dirPath, { recursive: true });
-		fs.writeFileSync(filePath, '', 'utf8');
+		if (!dirPath) {
+			vscode.window.showOpenDialog({
+				canSelectFiles: false,
+				canSelectFolders: true,
+				canSelectMany: false,
+				openLabel: 'Select Folder',
+			}).then((uri) => {
+				if (uri) {
+					const dirPath = uri[0].fsPath;
+					const filePath = path.join(dirPath, fileName);
 
-		vscode.workspace.openTextDocument(filePath).then(doc => {
-			vscode.window.showTextDocument(doc);
-		});
+					fs.mkdirSync(dirPath, { recursive: true });
+					fs.writeFileSync(filePath, '', 'utf8');
+
+					vscode.workspace.openTextDocument(filePath).then(doc => {
+						vscode.window.showTextDocument(doc);
+					});
+				}
+			});
+
+			return;
+		} else {
+			const filePath = path.join(dirPath, fileName);
+
+			fs.mkdirSync(dirPath, { recursive: true });
+			fs.writeFileSync(filePath, '', 'utf8');
+
+			vscode.workspace.openTextDocument(filePath).then(doc => {
+				vscode.window.showTextDocument(doc);
+			});
+
+			return;
+		}
 	});
 
 	context.subscriptions.push(disposable);

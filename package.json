@@ -13,7 +13,9 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onView:workbench-view-extension-createSnowflakeWorksheet"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -31,6 +33,26 @@
           "description": "保存先のパスを指定します。"
         }
       }
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "worksheet-explorer",
+          "name": "Snowflake Worksheets",
+          "when": "explorerResourceIsFolder && explorerResourceIsRoot && explorerViewletVisible && !inputFocus",
+          "contextMenuGroupId": "worksheet-explorer",
+          "contextMenuOrder": 10
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "workbench-view-extension-createSnowflakeWorksheet",
+          "title": "Snowflake Worksheets",
+          "icon": "resources/extension.svg"
+        }
+      ]
     }
   },
   "scripts": {
