@@ -3,6 +3,10 @@
   "displayName": "create snowflake worksheets",
   "description": "",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/KuragariKurage/vscode-create-snowflake-worksheet.git"
+  },
   "engines": {
     "vscode": "^1.84.0"
   },
@@ -17,7 +21,17 @@
         "command": "create-snowflake-worksheets.createSnowflakeWorksheet",
         "title": "Create New Snowflake Worksheet"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Create Snowflake Worksheets",
+      "properties": {
+        "create-snowflake-worksheets.savePath": {
+          "type": "string",
+          "default": "",
+          "description": "保存先のパスを指定します。"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
