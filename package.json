@@ -13,13 +13,49 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onView:workbench-view-extension-createSnowflakeWorksheet"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "create-snowflake-worksheets.createSnowflakeWorksheet",
-        "title": "Create New Snowflake Worksheet"
+        "command": "create-snowflake-worksheets.createQueryEntryFromExplorer",
+        "title": "Create New Query Worksheet"
+      },
+      {
+        "command": "create-snowflake-worksheets.createQueryEntry",
+        "title": "New Query Worksheet",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "create-snowflake-worksheets.deleteQueryEntry",
+        "title": "Delete"
+      },
+      {
+        "command": "create-snowflake-worksheets.renameQueryEntry",
+        "title": "Rename"
+      },
+      {
+        "command": "create-snowflake-worksheets.openFile",
+        "title": "Open Query"
+      },
+      {
+        "command": "create-snowflake-worksheets.duplicateQueryEntry",
+        "title": "Duplicate"
+      },
+      {
+        "command": "create-snowflake-worksheets.createQueryDirectory",
+        "title": "New Folder",
+        "icon":  "$(new-folder)"
+      },
+      {
+        "command": "create-snowflake-worksheets.deleteQueryDirectory",
+        "title": "Delete"
+      },
+      {
+        "command": "create-snowflake-worksheets.renameQueryDirectory",
+        "title": "Rename"
       }
     ],
     "configuration": {
@@ -31,7 +67,83 @@
           "description": "保存先のパスを指定します。"
         }
       }
-    }
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "query-explorer",
+          "name": "Query Worksheets",
+          "icon": "$(database)",
+          "contextualTitle": "Query Worksheets"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "create-snowflake-worksheets.createQueryEntry",
+          "when": "view == query-explorer",
+          "group": "navigation"
+        },
+        {
+          "command": "create-snowflake-worksheets.createQueryDirectory",
+          "when": "view == query-explorer",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "create-snowflake-worksheets.deleteQueryEntry",
+          "when": "view == query-explorer && viewItem == file",
+          "group": "1_modification"
+        },
+        {
+          "command": "create-snowflake-worksheets.renameQueryEntry",
+          "when": "view == query-explorer && viewItem == file",
+          "group": "1_modification"
+        },
+        {
+          "command": "create-snowflake-worksheets.duplicateQueryEntry",
+          "when": "view == query-explorer && viewItem == file",
+          "group": "1_modification"
+        },
+        {
+          "command": "create-snowflake-worksheets.createQueryDirectory",
+          "when": "view == query-explorer && viewItem == directory",
+          "group": "1_modification"
+        },
+        {
+          "command": "create-snowflake-worksheets.createQueryEntry",
+          "when": "view == query-explorer && viewItem == directory",
+          "group": "1_modification"
+        },
+        {
+          "command": "create-snowflake-worksheets.deleteQueryDirectory",
+          "when": "view == query-explorer && viewItem == directory",
+          "group": "1_modification"
+        },
+        {
+          "command": "create-snowflake-worksheets.renameQueryDirectory",
+          "when": "view == query-explorer && viewItem == directory",
+          "group": "1_modification"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "panel": [
+        {
+          "id": "query-explorer",
+          "title": "Query Worksheets",
+          "icon": "$(database)"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "query-explorer",
+        "contents": "No Worksheets Found. Click the New button to create a new worksheet. \n[New Worksheet](command:create-snowflake-worksheets.createQueryEntry)"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
