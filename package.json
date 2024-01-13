@@ -20,8 +20,42 @@
   "contributes": {
     "commands": [
       {
-        "command": "create-snowflake-worksheets.createSnowflakeWorksheet",
-        "title": "Create New Snowflake Worksheet"
+        "command": "create-snowflake-worksheets.createQueryEntryFromExplorer",
+        "title": "Create New Query Worksheet"
+      },
+      {
+        "command": "create-snowflake-worksheets.createQueryEntry",
+        "title": "New Query Worksheet",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "create-snowflake-worksheets.deleteQueryEntry",
+        "title": "Delete"
+      },
+      {
+        "command": "create-snowflake-worksheets.renameQueryEntry",
+        "title": "Rename"
+      },
+      {
+        "command": "create-snowflake-worksheets.openFile",
+        "title": "Open Query"
+      },
+      {
+        "command": "create-snowflake-worksheets.duplicateQueryEntry",
+        "title": "Duplicate"
+      },
+      {
+        "command": "create-snowflake-worksheets.createQueryDirectory",
+        "title": "New Folder",
+        "icon":  "$(new-folder)"
+      },
+      {
+        "command": "create-snowflake-worksheets.deleteQueryDirectory",
+        "title": "Delete"
+      },
+      {
+        "command": "create-snowflake-worksheets.renameQueryDirectory",
+        "title": "Rename"
       }
     ],
     "configuration": {
@@ -37,23 +71,79 @@
     "views": {
       "explorer": [
         {
-          "id": "worksheet-explorer",
-          "name": "Snowflake Worksheets",
-          "when": "explorerResourceIsFolder && explorerResourceIsRoot && explorerViewletVisible && !inputFocus",
-          "contextMenuGroupId": "worksheet-explorer",
-          "contextMenuOrder": 10
+          "id": "query-explorer",
+          "name": "Query Worksheets",
+          "icon": "$(database)",
+          "contextualTitle": "Query Worksheets"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "create-snowflake-worksheets.createQueryEntry",
+          "when": "view == query-explorer",
+          "group": "navigation"
+        },
+        {
+          "command": "create-snowflake-worksheets.createQueryDirectory",
+          "when": "view == query-explorer",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "create-snowflake-worksheets.deleteQueryEntry",
+          "when": "view == query-explorer && viewItem == file",
+          "group": "1_modification"
+        },
+        {
+          "command": "create-snowflake-worksheets.renameQueryEntry",
+          "when": "view == query-explorer && viewItem == file",
+          "group": "1_modification"
+        },
+        {
+          "command": "create-snowflake-worksheets.duplicateQueryEntry",
+          "when": "view == query-explorer && viewItem == file",
+          "group": "1_modification"
+        },
+        {
+          "command": "create-snowflake-worksheets.createQueryDirectory",
+          "when": "view == query-explorer && viewItem == directory",
+          "group": "1_modification"
+        },
+        {
+          "command": "create-snowflake-worksheets.createQueryEntry",
+          "when": "view == query-explorer && viewItem == directory",
+          "group": "1_modification"
+        },
+        {
+          "command": "create-snowflake-worksheets.deleteQueryDirectory",
+          "when": "view == query-explorer && viewItem == directory",
+          "group": "1_modification"
+        },
+        {
+          "command": "create-snowflake-worksheets.renameQueryDirectory",
+          "when": "view == query-explorer && viewItem == directory",
+          "group": "1_modification"
         }
       ]
     },
     "viewsContainers": {
-      "activitybar": [
+      "panel": [
         {
-          "id": "workbench-view-extension-createSnowflakeWorksheet",
-          "title": "Snowflake Worksheets",
-          "icon": "resources/extension.svg"
+          "id": "query-explorer",
+          "title": "Query Worksheets",
+          "icon": "$(database)"
         }
       ]
-    }
+    },
+    "viewsWelcome": [
+      {
+        "view": "query-explorer",
+        "contents": "No Worksheets Found. Click the New button to create a new worksheet. \n[New Worksheet](command:create-snowflake-worksheets.createQueryEntry)"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -64,14 +154,18 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.84.0",
     "@types/mocha": "^10.0.6",
     "@types/node": "18.x",
+    "@types/vscode": "^1.84.0",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
-    "eslint": "^8.54.0",
-    "typescript": "^5.3.2",
     "@vscode/test-cli": "^0.0.4",
-    "@vscode/test-electron": "^2.3.8"
+    "@vscode/test-electron": "^2.3.8",
+    "eslint": "^8.54.0",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "mkdirp": "^3.0.1",
+    "rimraf": "^5.0.5"
   }
 }
